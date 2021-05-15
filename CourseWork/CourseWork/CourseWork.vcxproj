@@ -139,13 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Cramar.cpp" />
+    <ClCompile Include="Cramer.cpp" />
     <ClCompile Include="GaussDiagonal.cpp" />
     <ClCompile Include="GaussMainElement.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Cramar.h" />
+    <ClInclude Include="Cramer.h" />
     <ClInclude Include="GaussDiagonal.h" />
     <ClInclude Include="GaussMainElement.h" />
   </ItemGroup>

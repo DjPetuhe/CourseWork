@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <ctime>
+#include "Cramer.h"
 using namespace std;
 
 template <typename T>
@@ -20,8 +21,24 @@ void graph_out(vector<vector<float>>&);
 int main()
 {
     srand(time(NULL));
-    vector<vector<float>> matrix(10, vector<float>(10));
+    vector<vector<float>> matrix(5, vector<float>(5));
+    vector<float> var(5);
+    vector<float> solved(5);
+    for (int i = 0; i < 5; i++)
+    {
+        var[i] = rand() % 9 + 1;
+    }
     graph_inicial(matrix);
+    Cramer system(matrix, var);
+    solved = system.solve();
+    for (int i = 0; i < 5; i++)
+    {
+        cout << endl << "var " << i << " " << var[i];
+    }
+    for (int i = 0; i < 5; i++)
+    {
+        cout << endl << "Amswer " << i << " "<< solved[i];
+    }
 }
 
 void graph_inicial(vector<vector<float>> &graph)
@@ -44,9 +61,9 @@ void graph_inicial(vector<vector<float>> &graph)
 
 void random_inicial(vector<vector<float>> &graph)
 {
-    for (int i = 0; i < 10; i++) //Генерування іншої частини графу.
+    for (int i = 0; i < 5; i++) //Генерування іншої частини графу.
     {
-        for (int j = 0; j < 10; j++)
+        for (int j = 0; j < 5; j++)
         {
             graph[i][j] = rand() % 9 + 1;
         }
@@ -57,7 +74,7 @@ void random_inicial(vector<vector<float>> &graph)
 
 void manual_inicial(vector<vector<float>> &graph)
 {
-    for (int i = 0; i < 10; i++) //Для кожної вершини вказуємо зв'язки.
+    for (int i = 0; i < 5; i++) //Для кожної вершини вказуємо зв'язки.
     {
         cout << "Enter vertices that have a common edge with " << i + 1 << " vertex:" << endl;
         for (int j = 0; j < graph.size(); j++)

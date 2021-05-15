@@ -24,7 +24,7 @@
     <ClCompile Include="GaussMainElement.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Cramar.cpp">
+    <ClCompile Include="Cramer.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClInclude Include="GaussMainElement.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Cramar.h">
+    <ClInclude Include="Cramer.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
