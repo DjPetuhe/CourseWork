@@ -4,12 +4,12 @@
 class Cramer
 {
 private:
-	std::vector<std::vector<float>> matrix;
-	std::vector<float> freeElements;
+	std::vector<std::vector<double> > matrix;
+	std::vector<double> freeElements;
+	std::vector<std::vector<double> > replaceColumn(int);
 public:
-	Cramer(std::vector<std::vector<float>>, std::vector<float>);
-	std::vector<float> solve();
-	std::vector<std::vector<float>> replaceColumn(int);
-	static float findDeterminant(std::vector<std::vector<float>>);
+	static double findDeterminant(std::vector<std::vector<double> >);
+	Cramer(std::vector<std::vector<double> >, std::vector<double>);
+	std::vector<double> solve();
 };
 

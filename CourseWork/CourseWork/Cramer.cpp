@@ -2,10 +2,10 @@
 #include <iostream>
 using namespace std;
 
-vector<float> Cramer::solve()
+vector<double> Cramer::solve()
 {
-	vector<float> variables;
-	vector<vector<float>> tempMatrix;
+	vector<double> variables;
+	vector<vector<double>> tempMatrix;
 	float tempDeterminant;
 	float determinant = findDeterminant(matrix);
 	if (determinant != 0.0)
@@ -24,15 +24,15 @@ vector<float> Cramer::solve()
 	return variables;
 }
 
-Cramer::Cramer(vector<vector<float>> mat, vector<float> var)
+Cramer::Cramer(vector<vector<double> > mat, vector<double> var)
 {
 	matrix = mat;
 	freeElements = var;
 }
 
-vector<vector<float>> Cramer::replaceColumn(int column)
+vector<vector<double> > Cramer::replaceColumn(int column)
 {
-	vector<vector<float>> matrWithColumn(matrix.size(),vector<float>(matrix.size()));
+	vector<vector<double> > matrWithColumn(matrix.size(),vector<double>(matrix.size()));
 	for (int i = 0; i < matrix.size(); i++)
 	{
 		for (int j = 0; j < matrix.size(); j++)
@@ -50,10 +50,10 @@ vector<vector<float>> Cramer::replaceColumn(int column)
 	return matrWithColumn;
 }
 
-float Cramer::findDeterminant(vector<vector<float>> matr)
+double Cramer::findDeterminant(vector<vector<double> > matr)
 {
 	float determinant = 0.0;
-	vector<vector<float>> submatrix(matr.size() - 1, vector<float>(matr.size() - 1));
+	vector<vector<double> > submatrix(matr.size() - 1, vector<double>(matr.size() - 1));
 	if (matr.size() == 1)
 	{
 		return matr[0][0];

@@ -4,6 +4,7 @@
 #include <vector>
 #include <ctime>
 #include "Cramer.h"
+#include "GaussDiagonal.h"
 using namespace std;
 
 template <typename T>
@@ -13,35 +14,50 @@ void input(string str, T* a)
     cin >> *a;
 }
 
-void graph_inicial(vector<vector<float>>&);
-void random_inicial(vector<vector<float>>&);
-void manual_inicial(vector<vector<float>>&);
-void graph_out(vector<vector<float>>&);
+void graph_inicial(vector<vector<double> >&);
+void random_inicial(vector<vector<double> >&);
+void manual_inicial(vector<vector<double> >&);
+void graph_out(vector<vector<double> >&);
 
 int main()
 {
     srand(time(NULL));
-    vector<vector<float>> matrix(5, vector<float>(5));
-    vector<float> var(5);
-    vector<float> solved(5);
-    for (int i = 0; i < 5; i++)
+    vector<vector<double> > matrix(6, vector<double>(6));
+    vector<double> var(6);
+    vector<double> solved(6);
+    for (int i = 0; i < 6; i++)
     {
         var[i] = rand() % 9 + 1;
     }
     graph_inicial(matrix);
+    vector<vector<double> > matrix2 = matrix;
+    vector<double> var2 = var;
+    vector<double> solved2(6);
     Cramer system(matrix, var);
+    GaussDiagonal system2(matrix2,var2);
     solved = system.solve();
-    for (int i = 0; i < 5; i++)
+    solved2 = system2.solve();
+    cout << endl << "CRAMAR: " << endl;
+    for (int i = 0; i < 6; i++)
     {
         cout << endl << "var " << i << " " << var[i];
     }
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 6; i++)
     {
         cout << endl << "Amswer " << i << " "<< solved[i];
     }
+    cout << endl << "GaussDiag: " << endl;
+    for (int i = 0; i < 6; i++)
+    {
+        cout << endl << "var2 " << i << " " << var2[i];
+    }
+    for (int i = 0; i < 6; i++)
+    {
+        cout << endl << "Amswer2 " << i << " " << solved2[i];
+    }
 }
 
-void graph_inicial(vector<vector<float>> &graph)
+void graph_inicial(vector<vector<double> > &graph)
 {
     bool random;
     input("Do you want your graph to be randomly generated?\n(1 - yes, 0 - no): ", &random);
@@ -59,11 +75,11 @@ void graph_inicial(vector<vector<float>> &graph)
 
 /*Ініціалізація графа випадковим чином.*/
 
-void random_inicial(vector<vector<float>> &graph)
+void random_inicial(vector<vector<double> > &graph)
 {
-    for (int i = 0; i < 5; i++) //Генерування іншої частини графу.
+    for (int i = 0; i < 6; i++) //Генерування іншої частини графу.
     {
-        for (int j = 0; j < 5; j++)
+        for (int j = 0; j < 6; j++)
         {
             graph[i][j] = rand() % 9 + 1;
         }
@@ -72,9 +88,9 @@ void random_inicial(vector<vector<float>> &graph)
 
 /*Генерування графу власноруч.*/
 
-void manual_inicial(vector<vector<float>> &graph)
+void manual_inicial(vector<vector<double> > &graph)
 {
-    for (int i = 0; i < 5; i++) //Для кожної вершини вказуємо зв'язки.
+    for (int i = 0; i < 6; i++) //Для кожної вершини вказуємо зв'язки.
     {
         cout << "Enter vertices that have a common edge with " << i + 1 << " vertex:" << endl;
         for (int j = 0; j < graph.size(); j++)
@@ -89,7 +105,7 @@ void manual_inicial(vector<vector<float>> &graph)
 
 /*Функція, яка виводить матрицю суміжності графа.*/
 
-void graph_out(vector<vector<float>> &graph)
+void graph_out(vector<vector<double> > &graph)
 {
     cout << "    ";
     for (int i = 0; i < graph.size(); i++)
