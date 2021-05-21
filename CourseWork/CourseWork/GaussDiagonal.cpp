@@ -129,6 +129,8 @@ bool GaussDiagonal::replaceColums(int n, FileWork& FileText, int& step)
 				double temp = freeElements[n];
 				freeElements[n] = freeElements[i];
 				freeElements[i] = temp;
+				step++;
+				FileText.writeStepOfGaussDiagnonalReplace(step,i,n,matrix);
 			}
 			else if (finished)
 			{
