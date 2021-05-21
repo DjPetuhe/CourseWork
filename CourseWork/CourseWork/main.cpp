@@ -5,6 +5,7 @@
 #include <ctime>
 #include "Cramer.h"
 #include "GaussDiagonal.h"
+#include "GaussMainElement.h"
 using namespace std;
 
 template <typename T>
@@ -31,29 +32,43 @@ int main()
     }
     graph_inicial(matrix);
     vector<vector<double> > matrix2 = matrix;
+    vector<vector<double> > matrix3 = matrix;
     vector<double> var2 = var;
+    vector<double> var3 = var;
     vector<double> solved2(6);
+    vector<double> solved3(6);
     Cramer system(matrix, var);
     GaussDiagonal system2(matrix2,var2);
+    GaussMainElement system3(matrix3, var3);
     solved = system.solve();
     solved2 = system2.solve();
+    solved3 = system3.solve();
     cout << endl << "CRAMAR: " << endl;
     for (int i = 0; i < 6; i++)
     {
         cout << endl << "var " << i << " " << var[i];
     }
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < solved.size(); i++)
     {
-        cout << endl << "Amswer " << i << " "<< solved[i];
+        cout << endl << "Amswer " << i << " "<< round(solved[i] * 100000)/100000.0;
     }
     cout << endl << "GaussDiag: " << endl;
     for (int i = 0; i < 6; i++)
     {
         cout << endl << "var2 " << i << " " << var2[i];
     }
+    for (int i = 0; i < solved2.size(); i++)
+    {
+        cout << endl << "Amswer2 " << i << " " << round(solved2[i] * 100000) / 100000.0;
+    }
+    cout << endl << "GaussMain: " << endl;
     for (int i = 0; i < 6; i++)
     {
-        cout << endl << "Amswer2 " << i << " " << solved2[i];
+        cout << endl << "var3 " << i << " " << var3[i];
+    }
+    for (int i = 0; i < solved3.size(); i++)
+    {
+        cout << endl << "Amswer3 " << i << " " << round(solved3[i] * 100000) / 100000.0;
     }
 }
 

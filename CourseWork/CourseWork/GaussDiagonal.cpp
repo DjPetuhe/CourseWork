@@ -1,28 +1,26 @@
 #include "GaussDiagonal.h"
 #include "Cramer.h"
-#include <iostream> //!!!!!
-using namespace std;
 
-GaussDiagonal::GaussDiagonal(vector<vector<double> > mat, vector<double> var)
+GaussDiagonal::GaussDiagonal(std::vector<std::vector<double> > mat, std::vector<double> var)
 {
 	matrix = mat;
 	freeElements = var;
 }
 
-vector<double> GaussDiagonal::solve()
+std::vector<double> GaussDiagonal::solve()
 {
 	double determinant = Cramer::findDeterminant(matrix);
 	if (determinant != 0.0)
 	{
-		//replaceColums();
+		replaceColums(0);
 		ToUpTriangle();
 		ToDiagonal();
-		DiagonalToOne();
+ 		DiagonalToOne();
 	}
 	else
 	{
-		cout << "Error!";
-		freeElements.clear();
+		//ERROR MESSAGE 
+		return {};
 	}
 	return this->freeElements;
 }
@@ -34,33 +32,33 @@ void GaussDiagonal::ToUpTriangle()
 	{
 		for (int i = k+1; i < matrix.size(); i++)
 		{
-			double coef = matrix[k][k] / matrix[i][k];
+			double coef = matrix[i][k] / matrix[k][k];
 			for (int j = k; j < matrix.size(); j++)
 			{
-				matrix[i][j] = matrix[k][j] - matrix[i][j] * coef;
+				matrix[i][j] = matrix[i][j] - matrix[k][j] * coef;
 			}
-			freeElements[i] = freeElements[k] - freeElements[i] * coef;
-		}
-	}
-}
-
-void GaussDiagonal::DiagonalToOne()
-{
-	for (int k = matrix.size() - 1; k > 0; k--)
-	{
-		for (int i = k - 1; i > 0; i--)
-		{
-			double coef = matrix[k][k] / matrix[i][k];
-			for (int j = k; j > 0; j--)
-			{
-				matrix[i][j] = matrix[k][j] - matrix[i][j] * coef;
-			}
-			freeElements[i] = freeElements[k] - freeElements[i] * coef;
+			freeElements[i] = freeElements[i] - freeElements[k] * coef;
 		}
 	}
 }
 
 void GaussDiagonal::ToDiagonal()
+{
+	for (int k = matrix.size() - 1; k >= 0; k--)
+	{
+		for (int i = k - 1; i >= 0; i--)
+		{
+			double coef = matrix[i][k] / matrix[k][k];
+			for (int j = k; j >= 0; j--)
+			{
+				matrix[i][j] = matrix[i][j] - matrix[k][j]* coef;
+			}
+			freeElements[i] = freeElements[i] - freeElements[k] * coef;
+		}
+	}
+}
+
+void GaussDiagonal::DiagonalToOne()
 {
 	for (int i = 0; i < matrix.size(); i++)
 	{
@@ -70,7 +68,37 @@ void GaussDiagonal::ToDiagonal()
 	}
 }
 
-void GaussDiagonal::replaceColums()
+bool GaussDiagonal::replaceColums(int n)
 {
-
+	bool finished = false;
+	if (n < matrix.size())
+	{
+		for (int i = 0; i < matrix.size(); i++)
+		{
+			if (matrix[n][n] != 0 && !finished)
+			{
+				finished = replaceColums(n + 1);
+			}
+			else if (!finished)
+			{
+				for (int j = 0; j < matrix.size(); j++)
+				{
+					double temp = matrix[n][j];
+					matrix[n][j] = matrix[i][j];
+					matrix[i][j] = temp;
+				}
+				double temp = freeElements[n];
+				freeElements[n] = freeElements[i];
+				freeElements[i] = temp;
+			}
+			else if (finished)
+			{
+				return true;
+			}
+		}
+	}
+	else
+	{
+		return true;
+	}
 }

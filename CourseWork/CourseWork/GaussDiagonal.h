@@ -8,7 +8,7 @@ private:
 	std::vector<double> freeElements;
 	void ToUpTriangle();
 	void ToDiagonal();
-	void replaceColums();
+	bool replaceColums(int);
 	void DiagonalToOne();
 public:
 	GaussDiagonal(std::vector<std::vector<double> >, std::vector<double>);
