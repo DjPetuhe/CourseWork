@@ -143,11 +143,13 @@
     <ClCompile Include="GaussDiagonal.cpp" />
     <ClCompile Include="GaussMainElement.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SystemOfLinearEquations.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cramer.h" />
     <ClInclude Include="GaussDiagonal.h" />
     <ClInclude Include="GaussMainElement.h" />
+    <ClInclude Include="SystemOfLinearEquations.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

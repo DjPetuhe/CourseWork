@@ -1,5 +1,4 @@
 #include "GaussDiagonal.h"
-#include "Cramer.h"
 
 GaussDiagonal::GaussDiagonal(std::vector<std::vector<double> > mat, std::vector<double> var)
 {
@@ -9,7 +8,7 @@ GaussDiagonal::GaussDiagonal(std::vector<std::vector<double> > mat, std::vector<
 
 std::vector<double> GaussDiagonal::solve()
 {
-	double determinant = Cramer::findDeterminant(matrix);
+	double determinant = findDeterminant(matrix);
 	if (determinant != 0.0)
 	{
 		replaceColums(0);

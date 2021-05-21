@@ -1,5 +1,4 @@
 #include "GaussMainElement.h"
-#include "Cramer.h"
 #include <math.h>
 
 GaussMainElement::GaussMainElement(std::vector<std::vector<double>> mat, std::vector<double> free)
@@ -10,7 +9,7 @@ GaussMainElement::GaussMainElement(std::vector<std::vector<double>> mat, std::ve
 
 std::vector<double> GaussMainElement::solve()
 {
-	double determinant = Cramer::findDeterminant(matrix);
+	double determinant = findDeterminant(matrix);
 	if (determinant != 0)
 	{
 		for (int i = 0; i < matrix.size() - 1; i++)

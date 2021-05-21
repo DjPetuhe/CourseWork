@@ -1,11 +1,10 @@
 #pragma once
 #include <vector>
+#include "SystemOfLinearEquations.h"
 
-class GaussDiagonal
+class GaussDiagonal: public SystemOfLinearEquations
 {
 private:
-	std::vector<std::vector<double> > matrix;
-	std::vector<double> freeElements;
 	void ToUpTriangle();
 	void ToDiagonal();
 	bool replaceColums(int);

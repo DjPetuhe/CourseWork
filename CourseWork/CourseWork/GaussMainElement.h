@@ -1,10 +1,9 @@
 #pragma once
 #include <vector>
+#include "SystemOfLinearEquations.h"
 
-class GaussMainElement
+class GaussMainElement: public SystemOfLinearEquations
 {
-	std::vector<std::vector<double> > matrix;
-	std::vector<double> freeElements;
 	std::vector<int> MainRow;
 	std::vector<int> MainColumn;
 	void findMax(int&, int&, double&);
