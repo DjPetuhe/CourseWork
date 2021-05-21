@@ -1,5 +1,9 @@
 #include "SystemOfLinearEquations.h"
 
+/*-------------------------------------------------------------
+	Метод, який знаходить визначник матриці, та повератє його
+  -------------------------------------------------------------*/
+
 double SystemOfLinearEquations::findDeterminant(std::vector<std::vector<double> > matr)
 {
 	float determinant = 0.0;
