@@ -1,3 +1,4 @@
+#include <ctime>
 #include "GaussDiagonal.h"
 
 /*----------------------
@@ -8,21 +9,31 @@ GaussDiagonal::GaussDiagonal(std::vector<std::vector<double> > mat, std::vector<
 {
 	matrix = mat;
 	freeElements = var;
+	complexity = 0;
+	workTime = 0;
 }
 
 /*---------------------------------------------------------------------------------------------
 	Публічний метод, який розв'язує СЛАР, та повертає вектор розв'язків, якщо система сумісна
   ---------------------------------------------------------------------------------------------*/
 
-std::vector<double> GaussDiagonal::solve()
+std::vector<double> GaussDiagonal::solve(std::string directory)
 {
-	double determinant = findDeterminant(matrix);
+	FileWork FileText(directory);
+	clock_t startTime = clock();
+	double determinant = findDeterminant(matrix, complexity);
+	int step = 1;
+	FileText.writeNameOfMethodAndMainDeterminant("Ровз'язання СЛАР методом Гауса-Жордана (з одиничною діагоналлю)", matrix, determinant);
 	if (determinant != 0.0)
 	{
-		replaceColums(0);
-		ToUpTriangle();
-		ToDiagonal();
- 		DiagonalToOne();
+		replaceColums(0,FileText, step);
+		ToUpTriangle(FileText, step);
+		ToDiagonal(FileText, step);
+ 		DiagonalToOne(FileText, step);
+		FileText.writeResults(freeElements);
+		clock_t endtime = clock();
+		workTime = (double)(endtime - startTime) / CLOCKS_PER_SEC;
+		FileText.writeStatistics(workTime, complexity);
 	}
 	else
 	{
@@ -36,7 +47,7 @@ std::vector<double> GaussDiagonal::solve()
 	Приватний метод, який зводить матрицю до верхньотрикутного виду
   -------------------------------------------------------------------*/
 
-void GaussDiagonal::ToUpTriangle()
+void GaussDiagonal::ToUpTriangle(FileWork& FileText, int& step)
 {
 	for (int k = 0; k < matrix.size() - 1; k++)
 	{
@@ -48,6 +59,8 @@ void GaussDiagonal::ToUpTriangle()
 				matrix[i][j] = matrix[i][j] - matrix[k][j] * coef;
 			}
 			freeElements[i] = freeElements[i] - freeElements[k] * coef;
+			step++;
+			FileText.writeStepOfGaussDiagnonal(step, i, k, "Зведення матриці до верхньотрикутного виду",matrix, coef);
 		}
 	}
 }
@@ -56,7 +69,7 @@ void GaussDiagonal::ToUpTriangle()
 	Приватний метод, який зводить верхньотрикутну матрицю до діагональної
   -------------------------------------------------------------------------*/
 
-void GaussDiagonal::ToDiagonal()
+void GaussDiagonal::ToDiagonal(FileWork& FileText, int& step)
 {
 	for (int k = matrix.size() - 1; k >= 0; k--)
 	{
@@ -68,6 +81,8 @@ void GaussDiagonal::ToDiagonal()
 				matrix[i][j] = matrix[i][j] - matrix[k][j]* coef;
 			}
 			freeElements[i] = freeElements[i] - freeElements[k] * coef;
+			step++;
+			FileText.writeStepOfGaussDiagnonal(step, i, k, "Зведення матриці до діагональної матриці", matrix, coef);
 		}
 	}
 }
@@ -76,13 +91,15 @@ void GaussDiagonal::ToDiagonal()
 	Приватний метод, який домножає кожний рядок матриці на відповідний множник, що звести ії до одиничної
   ---------------------------------------------------------------------------------------------------------*/
 
-void GaussDiagonal::DiagonalToOne()
+void GaussDiagonal::DiagonalToOne(FileWork& FileText, int& step)
 {
 	for (int i = 0; i < matrix.size(); i++)
 	{
 		double coef = pow(matrix[i][i], -1);
 		matrix[i][i] = matrix[i][i] * coef;
 		freeElements[i] = freeElements[i] * coef;
+		step++;
+		FileText.writeStepOfGaussDiagnonalMult(step,i,matrix,coef);
 	}
 }
 
@@ -90,7 +107,7 @@ void GaussDiagonal::DiagonalToOne()
 	Приватний метод, який міняє місцями ряди матриці, щоб уникнути ситуацій, коли на головній діагоналі нулі
   ------------------------------------------------------------------------------------------------------------*/
 
-bool GaussDiagonal::replaceColums(int n)
+bool GaussDiagonal::replaceColums(int n, FileWork& FileText, int& step)
 {
 	bool finished = false;
 	if (n < matrix.size())
@@ -99,7 +116,7 @@ bool GaussDiagonal::replaceColums(int n)
 		{
 			if (matrix[n][n] != 0 && !finished)
 			{
-				finished = replaceColums(n + 1);
+				finished = replaceColums(n + 1, FileText, step);
 			}
 			else if (!finished)
 			{
@@ -123,4 +140,22 @@ bool GaussDiagonal::replaceColums(int n)
 	{
 		return true;
 	}
+}
+
+/*------------------------------------------------------------------
+	Публічний метод, який вертає значення часу виконання розв'язка
+  ------------------------------------------------------------------*/
+
+double GaussDiagonal::getTime()
+{
+	return workTime;
+}
+
+/*--------------------------------------------------------------
+	Публічний метод, який вертає значення складності алгоритма
+  --------------------------------------------------------------*/
+
+int GaussDiagonal::getComplexity()
+{
+	return complexity;
 }

@@ -1,5 +1,6 @@
-#include "GaussMainElement.h"
 #include <math.h>
+#include <ctime>
+#include "GaussMainElement.h"
 
 /*----------------------
 	Конструктор класса 
@@ -9,15 +10,21 @@ GaussMainElement::GaussMainElement(std::vector<std::vector<double>> mat, std::ve
 {
 	matrix = mat;
 	freeElements = free;
+	complexity = 0;
+	workTime = 0;
 }
 
 /*---------------------------------------------------------------------------------------------
 	Публічний метод, який розв'язує СЛАР, та повертає вектор розв'язків, якщо система сумісна
   ---------------------------------------------------------------------------------------------*/
 
-std::vector<double> GaussMainElement::solve()
+std::vector<double> GaussMainElement::solve(std::string directory)
 {
-	double determinant = findDeterminant(matrix);
+	FileWork FileText(directory);
+	clock_t startTime = clock();
+	double determinant = findDeterminant(matrix, complexity);
+	FileText.writeNameOfMethodAndMainDeterminant("Ровз'язання СЛАР методом Гауса з вибором головного елемента в матриці", matrix, determinant);
+	int step = 1;
 	if (determinant != 0)
 	{
 		for (int i = 0; i < matrix.size() - 1; i++)
@@ -25,12 +32,19 @@ std::vector<double> GaussMainElement::solve()
 			int i_max, j_max;
 			double max = INT_MIN;
 			findMax(i_max, j_max, max);
+			step++;
+			FileText.writeStepOfGaussMainElementFind(step, "Знаходження найбільшого за модулем елемента серед неголовних рядків та стовпців", matrix, i_max, j_max, max);
 			MainRow.push_back(i_max);
 			MainColumn.push_back(j_max);
-			addCoef();
+			addCoef(FileText, step);
 		}
-		lastMainRowAndColumn();
-		return findResult();
+		lastMainRowAndColumn(FileText, step);
+		std::vector<double> results = findResult();
+		clock_t endtime = clock();
+		workTime = (double)(endtime - startTime) / CLOCKS_PER_SEC;
+		FileText.writeResults(results);
+		FileText.writeStatistics(workTime, complexity);
+		return results;
 	}
 	else
 	{
@@ -97,7 +111,7 @@ bool GaussMainElement::inMainColumn(int index)
 	та додає до нього домноженний на цей множник головний рядок.
   ---------------------------------------------------------------------------------*/
 
-void GaussMainElement::addCoef()
+void GaussMainElement::addCoef(FileWork &FileText, int &step)
 {
 	double coef;
 	for (int i = 0; i < matrix.size(); i++)
@@ -113,6 +127,8 @@ void GaussMainElement::addCoef()
 				}
 			}
 			freeElements[i] = freeElements[i] + freeElements[MainRow.back()] * coef;
+			step++;
+			FileText.writeStepOfGaussMainElementMultiplication(step,i,matrix, coef);
 		}
 	}
 }
@@ -120,19 +136,24 @@ void GaussMainElement::addCoef()
 	Приватний метод, який додає до головних рядків та стовбців останній стовпець та рядок в матрциі 1х1
   -------------------------------------------------------------------------------------------------------*/
 
-void GaussMainElement::lastMainRowAndColumn()
+void GaussMainElement::lastMainRowAndColumn(FileWork &FileText, int &step)
 {
+	int i_last, j_last;
 	for (int i = 0; i < matrix.size(); i++)
 	{
 		if (!inMainRow(i))
 		{
 			MainRow.push_back(i);
+			i_last = i;
 		}
 		if (!inMainColumn(i))
 		{
 			MainColumn.push_back(i);
+			j_last = i;
 		}
 	}
+	step++;
+	FileText.writeStepOfGaussMainElement(step, i_last, j_last);
 }
 
 /*----------------------------------------------------------------------------------------------------------------
@@ -149,8 +170,27 @@ std::vector<double> GaussMainElement::findResult()
 		for (int j = i + 1; j < MainRow.size(); j++)
 		{
 			S += matrix[MainRow[i]][MainColumn[j]] * results[MainColumn[j]];
+			complexity++;
 		}
 		results[MainColumn[i]] = (freeElements[MainRow[i]] - S) / matrix[MainRow[i]][MainColumn[i]];
 	}
 	return results;
+}
+
+/*------------------------------------------------------------------
+	Публічний метод, який вертає значення часу виконання розв'язка
+  ------------------------------------------------------------------*/
+
+double GaussMainElement::getTime()
+{
+	return workTime;
+}
+
+/*--------------------------------------------------------------
+	Публічний метод, який вертає значення складності алгоритма
+  --------------------------------------------------------------*/
+
+int GaussMainElement::getComplexity()
+{
+	return complexity;
 }

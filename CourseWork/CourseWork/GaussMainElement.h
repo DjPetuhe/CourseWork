@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include <string>
+#include "FileWork.h"
 #include "SystemOfLinearEquations.h"
 
 /*------------------------------------------------------------------------------------
@@ -13,11 +15,13 @@ class GaussMainElement: public SystemOfLinearEquations
 	void findMax(int&, int&, double&);
 	bool inMainRow(int);
 	bool inMainColumn(int);
-	void addCoef();
-	void lastMainRowAndColumn();
+	void addCoef(FileWork &, int &);
+	void lastMainRowAndColumn(FileWork &, int&);
 	std::vector<double> findResult();
 public:
 	GaussMainElement(std::vector<std::vector<double> >, std::vector<double>);
-	std::vector<double> solve();
+	std::vector<double> solve(std::string);
+	double getTime();
+	int getComplexity();
 };
 

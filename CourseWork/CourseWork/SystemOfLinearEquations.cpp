@@ -4,17 +4,19 @@
 	Метод, який знаходить визначник матриці, та повератє його
   -------------------------------------------------------------*/
 
-double SystemOfLinearEquations::findDeterminant(std::vector<std::vector<double> > matr)
+double SystemOfLinearEquations::findDeterminant(std::vector<std::vector<double> > matr, int& complex)
 {
 	float determinant = 0.0;
 	std::vector<std::vector<double> > submatrix(matr.size() - 1, std::vector<double>(matr.size() - 1));
 	if (matr.size() == 1)
 	{
 		return matr[0][0];
+		complex++;
 	}
 	else if (matr.size() == 2)
 	{
 		return ((matr[0][0] * matr[1][1]) - (matr[0][1] * matr[1][0]));
+		complex++;
 	}
 	else
 	{
@@ -26,6 +28,7 @@ double SystemOfLinearEquations::findDeterminant(std::vector<std::vector<double> 
 				int subj = 0;
 				for (int j = 0; j < matr.size(); j++)
 				{
+					complex++;
 					if (j == c)
 					{
 						continue;
@@ -35,7 +38,7 @@ double SystemOfLinearEquations::findDeterminant(std::vector<std::vector<double> 
 				}
 				subi++;
 			}
-			determinant = determinant + (pow(-1, c) * matr[0][c] * findDeterminant(submatrix));
+			determinant = determinant + (pow(-1, c) * matr[0][c] * findDeterminant(submatrix, complex));
 		}
 	}
 	return determinant;

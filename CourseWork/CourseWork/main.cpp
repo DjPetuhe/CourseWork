@@ -40,9 +40,9 @@ int main()
     Cramer system(matrix, var);
     GaussDiagonal system2(matrix2,var2);
     GaussMainElement system3(matrix3, var3);
-    solved = system.solve();
-    solved2 = system2.solve();
-    solved3 = system3.solve();
+    solved = system.solve("result.txt");
+    solved2 = system2.solve("result.txt");
+    solved3 = system3.solve("result.txt");
     cout << endl << "CRAMAR: " << endl;
     for (int i = 0; i < 6; i++)
     {
@@ -111,7 +111,7 @@ void manual_inicial(vector<vector<double> > &graph)
         for (int j = 0; j < graph.size(); j++)
         {
             cout << j + 1 << ": ";
-            int vertice;
+            double vertice;
             cin >> vertice;
             graph[i][j] = vertice;
         }

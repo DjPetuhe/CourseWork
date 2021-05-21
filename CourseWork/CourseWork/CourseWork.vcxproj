@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cramer.cpp" />
+    <ClCompile Include="FileWork.cpp" />
     <ClCompile Include="GaussDiagonal.cpp" />
     <ClCompile Include="GaussMainElement.cpp" />
     <ClCompile Include="main.cpp" />
@@ -147,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cramer.h" />
+    <ClInclude Include="FileWork.h" />
     <ClInclude Include="GaussDiagonal.h" />
     <ClInclude Include="GaussMainElement.h" />
     <ClInclude Include="SystemOfLinearEquations.h" />
